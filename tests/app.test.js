@@ -1,16 +1,21 @@
 const request = require('supertest');
 const express = require('express');
 const fs = require('fs');
-const app = require('../index'); // Necesitamos exportar `app` desde index.js
+const { app, server } = require('../index'); // Necesitamos exportar `app` desde index.js
 
 describe('API de usuarios', () => {
     const testUser = { id: 'test123', name: 'Test User', email: 'test@example.com' };
 
-    afterAll(() => {
+    afterAll(async () => {
         // Limpieza: eliminar usuario de prueba si existe
         const users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
         const filtered = users.filter(u => u.id !== testUser.id);
         fs.writeFileSync('./users.json', JSON.stringify(filtered, null, 2), 'utf8');
+        
+        // Cerrar el servidor si existe
+        if (server) {
+            await new Promise((resolve) => server.close(resolve));
+        }
     });
 
     it('Debe responder el endpoint raíz', async () => {

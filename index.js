@@ -114,7 +114,12 @@ app.get('/users/:id', (req, res) => {
 //se agrego para el test 
 module.exports = app;
 
-// Iniciar el servidor
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
-});
+// Iniciar el servidor solo si no estamos en un entorno de test
+let server;
+if (process.env.NODE_ENV !== 'test') {
+    server = app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
+    });
+}
+
+module.exports = { app, server };
