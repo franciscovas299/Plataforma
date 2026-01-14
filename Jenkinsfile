@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        nodejs "Node"
-        dockerTool "Docker" 
+        nodejs "Node25"
+        dockerTool "Dockertool" 
     }
 
     stages {
